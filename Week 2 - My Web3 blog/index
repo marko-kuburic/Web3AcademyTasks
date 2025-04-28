@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Мој Web3 Блог</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #3a86ff;
+      --secondary: #f72585;
+      --accent: #06d6a0;
+      --dark: #1a1a40;
+      --light: #f8f9fa;
+      --gray: #6c757d;
+      --white: #ffffff;
+      --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      --card-shadow-hover: 0 10px 15px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4f0fc 100%);
+      color: #333;
+      line-height: 1.7;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+      padding: 40px 20px;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      box-shadow: var(--card-shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
+    }
+    
+    header h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      color: var(--dark);
+      margin-bottom: 15px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+    }
+    
+    header p {
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      color: var(--gray);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    
+    .blog-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+    
+    .post {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 0;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .post:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--card-shadow-hover);
+    }
+    
+    .post-image {
+      height: 180px;
+      background: linear-gradient(45deg, #3a86ff, #06d6a0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2.5rem;
+    }
+    
+    .post-content {
+      padding: 25px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .category {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      align-self: flex-start;
+    }
+    
+    .post h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      color: var(--dark);
+      margin-bottom: 15px;
+      line-height: 1.4;
+      font-weight: 600;
+    }
+    
+    .post p {
+      color: var(--gray);
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+      flex-grow: 1;
+    }
+    
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    
+    .tag {
+      display: inline-block;
+      background-color: rgba(247, 37, 133, 0.1);
+      color: var(--secondary);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      border: 1px solid rgba(247, 37, 133, 0.2);
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      background-color: var(--accent);
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: var(--transition);
+      font-weight: 600;
+      font-size: 0.9rem;
+      border: none;
+      cursor: pointer;
+      width: fit-content;
+    }
+    
+    .btn:hover {
+      background-color: #00b383;
+      transform: translateY(-2px);
+    }
+    
+    .btn::after {
+      content: '→';
+      margin-left: 8px;
+      transition: transform 0.3s;
+    }
+    
+    .btn:hover::after {
+      transform: translateX(3px);
+    }
+    
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      font-size: 0.9rem;
+      color: var(--gray);
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(5px);
+      border-radius: 16px;
+      margin-top: 60px;
+    }
+    
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    
+    footer a:hover {
+      color: var(--secondary);
+      text-decoration: underline;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .blog-container {
+        grid-template-columns: 1fr;
+      }
+      
+      header {
+        padding: 30px 15px;
+        margin-bottom: 40px;
+      }
+    }
+    
+    /* Animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .post {
+      animation: fadeIn 0.6s ease-out forwards;
+      opacity: 0;
+    }
+    
+    .post:nth-child(1) { animation-delay: 0.1s; }
+    .post:nth-child(2) { animation-delay: 0.2s; }
+    .post:nth-child(3) { animation-delay: 0.3s; }
+    .post:nth-child(4) { animation-delay: 0.4s; }
+    .post:nth-child(5) { animation-delay: 0.5s; }
+    .post:nth-child(6) { animation-delay: 0.6s; }
+    
+    /* Category colors */
+    .category-технологија { background: #3a86ff; }
+    .category-ipfs { background: #7209b7; }
+    .category-безбедност { background: #f72585; }
+    .category-новости { background: #4361ee; }
+    .category-блокчејн { background: #4cc9f0; }
+    .category-nft { background: #f8961e; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>🌐 Мој Web3 Блог</h1>
+      <p>Децентрализовани свет информација на IPFS мрежи - истражујте будућност интернета</p>
+    </header>
+
+    <div class="blog-container">
+      <div class="post">
+        <div class="post-image">🔗</div>
+        <div class="post-content">
+          <span class="category category-технологија">Технологија</span>
+          <h2>Шта је Web3?</h2>
+          <p>Web3 је визија новог интернета где су корисници власници својих података, а апликације функционишу без посредника...</p>
+          <div class="tags">
+            <span class="tag">Блокчејн</span>
+            <span class="tag">Децентрализација</span>
+          </div>
+          <a href="https://ipfs.io/ipfs/QmExampleHash1" class="btn">Прочитај више</a>
+        </div>
+      </div>
+
+      <div class="post">
+        <div class="post-image">📦</div>
+        <div class="post-content">
+          <span class="category category-ipfs">IPFS</span>
+          <h2>Како IPFS мења интернет?</h2>
+          <p>IPFS омогућава дистрибуирано чување фајлова, чинећи податке сигурнијим и отпорнијим на цензуру...</p>
+          <div class="tags">
+            <span class="tag">IPFS</span>
+            <span class="tag">Децентрализација</span>
+          </div>
+          <a href="https://ipfs.io/ipfs/QmExampleHash2" class="btn">Прочитај више</a>
+        </div>
+      </div>
+
+      <div class="post">
+        <div class="post-image">🔒</div>
+        <div class="post-content">
+          <span class="category category-безбедност">Безбедност</span>
+          <h2>Зашто децентрализација повећава сигурност?</h2>
+          <p>Без централизованих тачака напада, децентрализоване мреже пружају већи ниво сигурности за кориснике...</p>
+          <div class="tags">
+            <span class="tag">Сигурност</span>
+            <span class="tag">Приватност</span>
+          </div>
+          <a href="https://ipfs.io/ipfs/QmExampleHash3" class="btn">Прочитај више</a>
+        </div>
+      </div>
+
+      <div class="post">
+        <div class="post-image">✨</div>
+        <div class="post-content">
+          <span class="category category-новости">Новости</span>
+          <h2>Најновије у Web3 свету</h2>
+          <p>Нова партнерства, протоколи и апликације свакодневно се појављују на Web3 сцени, отварајући нова врата иновацијама...</p>
+          <div class="tags">
+            <span class="tag">Иновације</span>
+            <span class="tag">Технологија</span>
+          </div>
+          <a href="https://ipfs.io/ipfs/QmExampleHash4" class="btn">Прочитај више</a>
+        </div>
+      </div>
+
+      <div class="post">
+        <div class="post-image">⛓️</div>
+        <div class="post-content">
+          <span class="category category-блокчејн">Блокчејн</span>
+          <h2>Блокчејн: Будућност финансија</h2>
+          <p>Блокчејн је технологија која омогућава сигурну и транспарентну размену података без централизованих институција...</p>
+          <div class="tags">
+            <span class="tag">Крипто</span>
+            <span class="tag">Блокчејн</span>
+          </div>
+          <a href="https://ipfs.io/ipfs/QmExampleHash5" class="btn">Прочитај више</a>
+        </div>
+      </div>
+
+      <div class="post">
+        <div class="post-image">🖼️</div>
+        <div class="post-content">
+          <span class="category category-nft">NFT</span>
+          <h2>Шта су NFT-ови?</h2>
+          <p>NFT-ови су дигитални токени који омогућавају куповину, продају и трговину јединственим дигиталним предметима...</p>
+          <div class="tags">
+            <span class="tag">NFT</span>
+            <span class="tag">Крипто</span>
+          </div>
+          <a href="https://ipfs.io/ipfs/QmExampleHash6" class="btn">Прочитај више</a>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>© 2025 Мој Децентрализовани Блог | <a href="https://github.com/marko-kuburic" target="_blank">GitHub</a> | <a href="https://ipfs.io/ipfs/QmExampleHashAbout" target="_blank">О нама</a></p>
+    </footer>
+  </div>
+
+</body>
+</html>
