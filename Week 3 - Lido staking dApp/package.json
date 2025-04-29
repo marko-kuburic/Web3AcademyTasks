@@ -3,17 +3,26 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "cors": "^2.8.5",
     "ethers": "^6.13.7",
+    "node-fetch": "^3.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "recharts": "^2.15.3",
     "web3modal": "^1.9.12"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "install:frontend": "npm install",
+    "install:backend": "cd lido-backend && npm install",
+    "start:frontend": "npm start",
+    "start:backend": "cd lido-backend && npm run dev",
+    "install:all": "concurrently \"npm run install:frontend\" \"npm run install:backend\"",
+    "start:all": "concurrently \"npm run start:frontend\" \"npm run start:backend\""
   },
   "browserslist": {
     "production": [
@@ -26,5 +35,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "proxy": "http://localhost:3001",
+  "devDependencies": {
+    "concurrently": "^9.1.2"
   }
 }

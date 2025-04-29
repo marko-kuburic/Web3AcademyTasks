@@ -1,0 +1,6 @@
+@echo off
+echo Installing dependencies for frontend and backend...
+call npm install
+call npm install:backend
+echo Starting frontend and backend servers...
+call npm run start:all

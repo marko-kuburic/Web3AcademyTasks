@@ -1,60 +1,42 @@
-// src/index.js
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const LidoService = require("./lidoService");
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const axios = require('axios');
 
 const app = express();
-const port = process.env.PORT || 3001;
-
-// Enable CORS for frontend origin
-app.use(cors({ origin: "http://localhost:3000" }));
-
-// Parse JSON bodies globally
+app.use(cors());
 app.use(express.json());
 
-// Ensure required env var is present
-const { RPC_URL, LIDO_ADDRESS } = process.env;
-if (!RPC_URL || !LIDO_ADDRESS) {
-  console.error("Error: RPC_URL and LIDO_ADDRESS must be set in .env");
-  process.exit(1);
-}
+app.post('/api/apy', async (req, res) => {
+  const GRAPH_URL = process.env.GRAPH_URL;
+  const { query } = req.body;
 
-// Initialize service
-const lidoService = new LidoService(RPC_URL, LIDO_ADDRESS);
+  if (!GRAPH_URL) {
+    return res.status(500).json({ error: 'GraphQL endpoint not configured' });
+  }
 
-// In-memory store for user stakes
-const userStakes = [];
+  if (!query) {
+    return res.status(400).json({ error: 'Missing GraphQL query' });
+  }
 
-// 1. Protocol-wide total staked ETH
-app.get("/api/total-staked", async (req, res) => {
   try {
-    const totalStakedETH = await lidoService.getTotalStaked();
-    res.json({ totalStakedETH });
+    const response = await axios.post(
+      GRAPH_URL,
+      { query },
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+    if (response.data.errors) {
+      console.error('GraphQL errors:', response.data.errors);
+      return res.status(500).json({ error: 'GraphQL query failed', details: response.data.errors });
+    }
+    res.json(response.data);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to fetch total staked ETH" });
+    console.error('GraphQL proxy error:', error.message);
+    res.status(500).json({ error: 'Failed to fetch from subgraph', details: error.message });
   }
 });
 
-// 2. Log a user stake
-app.post("/api/log-stake", (req, res) => {
-  const { user, amount } = req.body;
-  if (!user || amount === undefined) {
-    return res.status(400).json({ error: "user and amount required" });
-  }
-  userStakes.push({ user, amount: parseFloat(amount) });
-  console.log(`Logged stake: user=${user}, amount=${amount}`);
-  res.sendStatus(201);
-});
-
-// 3. Aggregated total for your app
-app.get("/api/app-total-staked", (req, res) => {
-  const total = userStakes.reduce((sum, s) => sum + s.amount, 0);
-  res.json({ appTotalStakedETH: total });
-});
-
-// Start server
-app.listen(port, () => {
-  console.log(`Lido backend listening on http://localhost:${port}`);
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
 });
