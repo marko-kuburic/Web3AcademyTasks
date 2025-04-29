@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Contract, parseEther, ZeroAddress } from "ethers";
 import { LIDO_ADDRESS, LIDO_ABI } from "../constants";
 
-export default function StakeForm({ signer }) {
+export default function StakeForm({ signer, address }) {
   const [amount, setAmount] = useState("");
 
   async function handleStake(e) {
@@ -13,6 +13,12 @@ export default function StakeForm({ signer }) {
       { value: parseEther(amount) }
     );
     await tx.wait();
+    await fetch('http://localhost:3001/api/log-stake', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user: address, amount })
+      });
+      
     alert("Staked!");
   }
 

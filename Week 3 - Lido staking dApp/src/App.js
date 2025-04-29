@@ -13,7 +13,7 @@ function App() {
         ? <button onClick={connect}>Connect MetaMask</button>
         : <>
             <p>Connected: {address}</p>
-            <StakeForm signer={signer} />
+            <StakeForm signer={signer} address={address} />
             <Balance provider={provider} address={address} />
             <UnstakeInfo />
           </>
