@@ -1,0 +1,17 @@
+.app-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  input {
+    margin-right: 10px;
+    padding: 4px;
+  }
+  
+  button {
+    padding: 6px 12px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+  }
+  
